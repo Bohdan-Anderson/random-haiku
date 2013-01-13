@@ -1,3 +1,5 @@
+import serial, time
+
 wordDict = {}
 
 import re
@@ -44,6 +46,70 @@ def getWordsByKeys(keys):
         
     return haiku
 
-print getWordsByKeys(getRandomSum(5))
-print getWordsByKeys(getRandomSum(7))
-print getWordsByKeys(getRandomSum(5))
+def clearScreen():
+    print""
+    print""
+    print""
+    print""
+    print""
+    print""
+    print""
+    print""
+    print""
+    print""
+
+while True:
+    print "type you user name"
+    name = raw_input(">")
+    print "retriving %s's data" %name
+    print "..."
+    ser = serial.Serial(7,19200)
+    time.sleep(1)
+    print "..."
+    time.sleep(2)
+    print "..."
+    time.sleep(3)
+    print "..."
+    time.sleep(1)
+    print "retrived data"
+    time.sleep(2)
+    print "printing"
+    time.sleep(3)
+
+    ser.write(chr(0x1B)+"@") #reset printer
+    ser.write(chr(0x1B)+"a1") #center the text
+
+    #ser.write(chr(0x1B)+chr(0x21)+chr(0x01))
+    #ser.write(chr(0x1B)+chr(0x40)+"1") #bold NOT
+
+    #ser.write(chr(0x1B)+chr(0x20)+"0") # set bold?
+
+    #ser.write(chr(0x1B)+chr(0x0E)) #set double width
+    #ser.write(chr(0x1B)+chr(0x14)) #disable double width
+
+    print "print line 1"
+    ser.write(" "+getWordsByKeys(getRandomSum(5)))
+    ser.write(chr(0x0A))
+    print "done"
+    time.sleep(1)
+
+    print "print line 2"    
+    ser.write(" "+getWordsByKeys(getRandomSum(7)))
+    ser.write(chr(0x0A))
+    print "done"
+    time.sleep(1)
+
+    print "print line 3"    
+    ser.write(" "+getWordsByKeys(getRandomSum(5)))
+    ser.write(chr(0x0A)+chr(0x0A))
+    print "done"
+    time.sleep(1)
+    print "disconnecting from printer"
+    time.sleep(2)    
+    print "..."
+    time.sleep(1)
+    print "..."
+    time.sleep(3) 
+    ser.close()
+    print "disconnected"    
+    clearScreen()   
