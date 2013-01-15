@@ -47,20 +47,43 @@ def getWordsByKeys(keys):
     return haiku
 
 def clearScreen():
-    print""
-    print""
-    print""
-    print""
-    print""
-    print""
-    print""
-    print""
-    print""
-    print""
+    for i in range(50):
+        print""
+
 
 while True:
-    print "type you user name"
-    name = raw_input(">")
+    clearScreen()
+    #text generator http://www.network-science.de/ascii/
+    print """
+
+            ___           ___                       ___           ___     
+           /\__\         /\  \          ___        /\__\         /\__\    
+          /:/  /        /::\  \        /\  \      /:/  /        /:/  /    
+         /:/__/        /:/\:\  \       \:\  \    /:/__/        /:/  /     
+        /::\  \ ___   /::\~\:\  \      /::\__\  /::\__\____   /:/  /  ___ 
+       /:/\:\  /\__\ /:/\:\ \:\__\  __/:/\/__/ /:/\:::::\__\ /:/__/  /\__\\
+       \/__\:\/:/  / \/__\:\/:/  / /\/:/  /    \/_|:|~~|~    \:\  \ /:/  /
+            \::/  /       \::/  /  \::/__/        |:|  |      \:\  /:/  / 
+            /:/  /        /:/  /    \:\__\        |:|  |       \:\/:/  /  
+           /:/  /        /:/  /      \/__/        |:|  |        \::/  /   
+           \/__/         \/__/                     \|__|         \/__/    
+    """
+    print """
+             _____ _____ _____ _____ _____ _____ _____ _____ _____ 
+            |   __|   __|   | |  _  | __  |  _  |_   _|     | __  |
+            |  |  |   __| | | |     |    -|     | | | |  |  |    -|
+            |_____|_____|_|___|__|__|__|__|__|__| |_| |_____|__|__|
+
+
+
+    """
+
+    while True:
+        print "type you user name"
+        name = raw_input(">")
+        if 10 > len(name) > 0:
+            break
+        print "sorry try a diffrent user"
     print "retriving %s's data" %name
     print "..."
     ser = serial.Serial(7,19200)
@@ -86,6 +109,20 @@ while True:
 
     #ser.write(chr(0x1B)+chr(0x0E)) #set double width
     #ser.write(chr(0x1B)+chr(0x14)) #disable double width
+    ser.write("---------------------------")
+    ser.write(chr(0x0A))  
+
+    ser.write(chr(0x1B)+chr(0x21)+chr(0x30))
+    ser.write("%s's"%name)
+    ser.write(chr(0x0A))
+    ser.write("HAIKU")  
+    ser.write(chr(0x0A))          
+  
+    ser.write(chr(0x1B)+"@") #reset printer
+    ser.write(chr(0x1B)+"a1") #center the text
+
+    ser.write("---------------------------")
+    ser.write(chr(0x0A))
 
     print "print line 1"
     ser.write(" "+getWordsByKeys(getRandomSum(5)))
@@ -103,6 +140,10 @@ while True:
     ser.write(" "+getWordsByKeys(getRandomSum(5)))
     ser.write(chr(0x0A)+chr(0x0A))
     print "done"
+
+    for i in range(4):    
+        ser.write(chr(0x0A)) 
+
     time.sleep(1)
     print "disconnecting from printer"
     time.sleep(2)    
